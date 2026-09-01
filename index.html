@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Painel do Negócio</title>
+<meta name="theme-color" content="#14231C" />
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" href="icon-192.png" />
+<link rel="apple-touch-icon" href="icon-192.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #F5F4F1;
+    color: #14231C;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 20px 14px 60px; }
+  header { display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid rgba(20,35,28,0.1); padding-bottom: 18px; margin-bottom: 20px; }
+  h1 { font-size: 22px; margin: 0; font-weight: 600; }
+  header p { margin: 2px 0 0; font-size: 13px; color: rgba(20,35,28,0.6); }
+  .badge { width: 40px; height: 40px; border-radius: 50%; background: #14231C;
+    display: flex; align-items: center; justify-content: center; color: #EFE9DD; font-size: 18px; flex-shrink: 0; }
+
+  #install-btn { display: none; width: 100%; margin-bottom: 16px; background: #1B6B4A; color: #fff;
+    border: none; border-radius: 8px; padding: 12px; font-size: 14px; font-weight: 600; cursor: pointer; }
+
+  .panel { background: #fff; border: 1px solid rgba(20,35,28,0.1); border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
+  .panel-header { padding: 14px 16px; border-bottom: 1px solid rgba(20,35,28,0.1); font-size: 14px; font-weight: 600; }
+  .panel-body { padding: 16px; }
+
+  /* Tabela resumo */
+  .tbl-resumo { width: 100%; border-collapse: collapse; }
+  .tbl-resumo th, .tbl-resumo td { text-align: left; padding: 10px 8px; font-size: 13px; }
+  .tbl-resumo thead th { color: rgba(20,35,28,0.5); font-weight: 500; border-bottom: 1px solid rgba(20,35,28,0.12); }
+  .tbl-resumo tbody td { font-weight: 600; font-size: 15px; font-variant-numeric: tabular-nums; border-bottom: none; }
+  .positive { color: #1B6B4A; }
+  .negative { color: #8A2E20; }
+
+  /* Formulário */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  input { border: 1px solid rgba(20,35,28,0.15); border-radius: 6px; padding: 9px 10px; font-size: 14px; width: 100%; outline: none; font-family: inherit; }
+  input:focus { border-color: rgba(20,35,28,0.5); }
+  .full { grid-column: 1 / -1; }
+  button.primary { grid-column: 1 / -1; background: #14231C; color: #EFE9DD; border: none; border-radius: 6px;
+    padding: 11px; font-size: 14px; font-weight: 500; cursor: pointer; }
+  button.primary:active { background: #0d1712; }
+  .erro { color: #8A2E20; font-size: 13px; margin-top: 8px; }
+
+  /* Tabela de produtos */
+  .tbl-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table.produtos { width: 100%; border-collapse: collapse; min-width: 640px; }
+  table.produtos thead th {
+    text-align: left; font-size: 11px; text-transform: none; font-weight: 500;
+    color: rgba(20,35,28,0.5); padding: 10px 12px; border-bottom: 1px solid rgba(20,35,28,0.12);
+    white-space: nowrap;
+  }
+  table.produtos tbody td {
+    padding: 10px 12px; font-size: 13px; border-bottom: 1px solid rgba(20,35,28,0.07);
+    white-space: nowrap; vertical-align: middle;
+  }
+  table.produtos tbody tr:last-child td { border-bottom: none; }
+  table.produtos tbody tr:hover { background: rgba(20,35,28,0.02); }
+  td.nome-cell { white-space: normal; font-weight: 500; min-width: 140px; }
+  td.num-cell { font-variant-numeric: tabular-nums; }
+  .vendidos-input { width: 56px; padding: 5px 6px; font-size: 13px; }
+  .del-btn { background: none; border: none; color: rgba(20,35,28,0.3); font-size: 15px; cursor: pointer; padding: 2px 4px; }
+  .del-btn:active { color: #8A2E20; }
+
+  .empty { padding: 40px 16px; text-align: center; font-size: 13px; color: rgba(20,35,28,0.5); }
+  .footer-note { text-align: center; font-size: 12px; color: rgba(20,35,28,0.4); margin-top: 20px; }
+  .scroll-hint { font-size: 11px; color: rgba(20,35,28,0.4); padding: 8px 16px 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Painel do Negócio</h1>
+      <p>Produtos, vendas e resultado</p>
+    </div>
+    <div class="badge">💼</div>
+  </header>
+
+  <button id="install-btn">⬇ Instalar este app no telemóvel</button>
+
+  <div class="panel">
+    <div class="panel-header">Resumo</div>
+    <div class="panel-body" style="padding-top:4px; padding-bottom:8px;">
+      <table class="tbl-resumo">
+        <thead>
+          <tr><th>Receita</th><th>Custo</th><th>Lucro líquido</th><th>Margem</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="c-receita">0,00 Kz</td>
+            <td id="c-custo">0,00 Kz</td>
+            <td id="c-lucro">0,00 Kz</td>
+            <td id="c-margem">0,00%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header">Adicionar produto</div>
+    <div class="panel-body">
+      <div class="form-grid">
+        <input class="full" id="f-nome" placeholder="Nome do produto" />
+        <input type="number" id="f-stock" placeholder="Stock" />
+        <input type="number" id="f-compra" placeholder="Preço custo (Kz)" />
+        <input type="number" id="f-venda" placeholder="Preço venda (Kz)" />
+        <button class="primary" id="btn-add">+ Adicionar</button>
+      </div>
+      <div class="erro" id="erro"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header" id="p-count">Produtos (0)</div>
+    <p class="scroll-hint">Desliza a tabela para o lado para ver todas as colunas →</p>
+    <div class="tbl-wrap">
+      <table class="produtos">
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Stock</th>
+            <th>Preço custo</th>
+            <th>Preço venda</th>
+            <th>Vendidos</th>
+            <th>Receita</th>
+            <th>Lucro</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="lista"></tbody>
+      </table>
+    </div>
+    <div id="empty-msg" class="empty" style="display:none;">Ainda não há produtos. Adiciona o primeiro acima.</div>
+  </div>
+
+  <p class="footer-note">Os dados ficam guardados neste telemóvel, mesmo offline.</p>
+</div>
+
+<script>
+  const STORAGE_KEY = "negocio_produtos_v1";
+  let produtos = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null") || [
+    { id: 1, nome: "Capa de álbum (design)", stock: 20, precoCompra: 500, precoVenda: 3500, vendidos: 6 },
+    { id: 2, nome: "Pack de flyers", stock: 40, precoCompra: 200, precoVenda: 1200, vendidos: 11 },
+  ];
+
+  function salvar() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(produtos));
+  }
+
+  function fmt(n) {
+    return (n || 0).toLocaleString("pt-PT", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function render() {
+    let receita = 0, custo = 0;
+    produtos.forEach(p => {
+      receita += p.precoVenda * p.vendidos;
+      custo += p.precoCompra * p.vendidos;
+    });
+    const lucro = receita - custo;
+    const margem = receita > 0 ? (lucro / receita) * 100 : 0;
+
+    document.getElementById("c-receita").textContent = fmt(receita) + " Kz";
+    document.getElementById("c-custo").textContent = fmt(custo) + " Kz";
+    const lucroEl = document.getElementById("c-lucro");
+    lucroEl.textContent = (lucro >= 0 ? "" : "-") + fmt(Math.abs(lucro)) + " Kz";
+    lucroEl.className = lucro >= 0 ? "positive" : "negative";
+    const margemEl = document.getElementById("c-margem");
+    margemEl.textContent = fmt(margem) + "%";
+    margemEl.className = margem >= 0 ? "positive" : "negative";
+
+    document.getElementById("p-count").textContent = `Produtos (${produtos.length})`;
+    const lista = document.getElementById("lista");
+    const emptyMsg = document.getElementById("empty-msg");
+    lista.innerHTML = "";
+
+    if (produtos.length === 0) {
+      emptyMsg.style.display = "block";
+      return;
+    }
+    emptyMsg.style.display = "none";
+
+    produtos.forEach(p => {
+      const rec = p.precoVenda * p.vendidos;
+      const cus = p.precoCompra * p.vendidos;
+      const luc = rec - cus;
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="nome-cell">${p.nome}</td>
+        <td class="num-cell">${p.stock}</td>
+        <td class="num-cell">${fmt(p.precoCompra)} Kz</td>
+        <td class="num-cell">${fmt(p.precoVenda)} Kz</td>
+        <td><input type="number" class="vendidos-input" data-id="${p.id}" value="${p.vendidos}" /></td>
+        <td class="num-cell">${fmt(rec)} Kz</td>
+        <td class="num-cell ${luc >= 0 ? "positive" : "negative"}">${luc >= 0 ? "" : "-"}${fmt(Math.abs(luc))} Kz</td>
+        <td><button class="del-btn" data-id="${p.id}" aria-label="Remover">🗑</button></td>
+      `;
+      lista.appendChild(tr);
+    });
+
+    document.querySelectorAll(".del-btn").forEach(btn => {
+      btn.onclick = () => {
+        produtos = produtos.filter(p => p.id != btn.dataset.id);
+        salvar(); render();
+      };
+    });
+    document.querySelectorAll(".vendidos-input").forEach(inp => {
+      inp.oninput = () => {
+        const p = produtos.find(p => p.id == inp.dataset.id);
+        p.vendidos = Math.max(0, Number(inp.value) || 0);
+        salvar(); render();
+      };
+    });
+  }
+
+  document.getElementById("btn-add").onclick = () => {
+    const nome = document.getElementById("f-nome").value.trim();
+    const stock = Number(document.getElementById("f-stock").value) || 0;
+    const compra = Number(document.getElementById("f-compra").value) || 0;
+    const venda = Number(document.getElementById("f-venda").value) || 0;
+    const erroEl = document.getElementById("erro");
+
+    if (!nome) { erroEl.textContent = "Dá um nome ao produto antes de adicionar."; return; }
+    if (!compra || !venda) { erroEl.textContent = "Preenche o preço de compra e de venda."; return; }
+    erroEl.textContent = "";
+
+    produtos.push({ id: Date.now(), nome, stock, precoCompra: compra, precoVenda: venda, vendidos: 0 });
+    salvar(); render();
+
+    document.getElementById("f-nome").value = "";
+    document.getElementById("f-stock").value = "";
+    document.getElementById("f-compra").value = "";
+    document.getElementById("f-venda").value = "";
+  };
+
+  render();
+
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("service-worker.js");
+    });
+  }
+
+  let deferredPrompt;
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById("install-btn").style.display = "block";
+  });
+  document.getElementById("install-btn").addEventListener("click", async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    document.getElementById("install-btn").style.display = "none";
+  });
+</script>
+</body>
+</html>
