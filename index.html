@@ -18,9 +18,9 @@
     background: #F5F4F1;
     color: #14231C;
   }
-  .wrap { max-width: 720px; margin: 0 auto; padding: 20px 14px 60px; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 20px 14px 80px; }
   header { display: flex; justify-content: space-between; align-items: center;
-    border-bottom: 1px solid rgba(20,35,28,0.1); padding-bottom: 18px; margin-bottom: 20px; }
+    border-bottom: 1px solid rgba(20,35,28,0.1); padding-bottom: 18px; margin-bottom: 16px; }
   h1 { font-size: 22px; margin: 0; font-weight: 600; }
   header p { margin: 2px 0 0; font-size: 13px; color: rgba(20,35,28,0.6); }
   .badge { width: 40px; height: 40px; border-radius: 50%; background: #14231C;
@@ -28,6 +28,15 @@
 
   #install-btn { display: none; width: 100%; margin-bottom: 16px; background: #1B6B4A; color: #fff;
     border: none; border-radius: 8px; padding: 12px; font-size: 14px; font-weight: 600; cursor: pointer; }
+
+  /* Navegação de abas */
+  .tabs { display: flex; gap: 6px; margin-bottom: 20px; background: #fff; border: 1px solid rgba(20,35,28,0.1);
+    border-radius: 10px; padding: 4px; }
+  .tab-btn { flex: 1; text-align: center; padding: 10px 8px; font-size: 13px; font-weight: 600;
+    border: none; background: transparent; border-radius: 7px; color: rgba(20,35,28,0.5); cursor: pointer; }
+  .tab-btn.active { background: #14231C; color: #EFE9DD; }
+  .view { display: none; }
+  .view.active { display: block; }
 
   .panel { background: #fff; border: 1px solid rgba(20,35,28,0.1); border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
   .panel-header { padding: 14px 16px; border-bottom: 1px solid rgba(20,35,28,0.1); font-size: 14px; font-weight: 600; }
@@ -43,8 +52,8 @@
 
   /* Formulário */
   .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  input { border: 1px solid rgba(20,35,28,0.15); border-radius: 6px; padding: 9px 10px; font-size: 14px; width: 100%; outline: none; font-family: inherit; }
-  input:focus { border-color: rgba(20,35,28,0.5); }
+  input, textarea { border: 1px solid rgba(20,35,28,0.15); border-radius: 6px; padding: 9px 10px; font-size: 14px; width: 100%; outline: none; font-family: inherit; }
+  input:focus, textarea:focus { border-color: rgba(20,35,28,0.5); }
   .full { grid-column: 1 / -1; }
   button.primary { grid-column: 1 / -1; background: #14231C; color: #EFE9DD; border: none; border-radius: 6px;
     padding: 11px; font-size: 14px; font-weight: 500; cursor: pointer; }
@@ -55,7 +64,7 @@
   .tbl-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   table.produtos { width: 100%; border-collapse: collapse; min-width: 640px; }
   table.produtos thead th {
-    text-align: left; font-size: 11px; text-transform: none; font-weight: 500;
+    text-align: left; font-size: 11px; font-weight: 500;
     color: rgba(20,35,28,0.5); padding: 10px 12px; border-bottom: 1px solid rgba(20,35,28,0.12);
     white-space: nowrap;
   }
@@ -64,16 +73,31 @@
     white-space: nowrap; vertical-align: middle;
   }
   table.produtos tbody tr:last-child td { border-bottom: none; }
-  table.produtos tbody tr:hover { background: rgba(20,35,28,0.02); }
   td.nome-cell { white-space: normal; font-weight: 500; min-width: 140px; }
   td.num-cell { font-variant-numeric: tabular-nums; }
   .vendidos-input { width: 56px; padding: 5px 6px; font-size: 13px; }
   .del-btn { background: none; border: none; color: rgba(20,35,28,0.3); font-size: 15px; cursor: pointer; padding: 2px 4px; }
-  .del-btn:active { color: #8A2E20; }
 
   .empty { padding: 40px 16px; text-align: center; font-size: 13px; color: rgba(20,35,28,0.5); }
   .footer-note { text-align: center; font-size: 12px; color: rgba(20,35,28,0.4); margin-top: 20px; }
   .scroll-hint { font-size: 11px; color: rgba(20,35,28,0.4); padding: 8px 16px 0; }
+
+  /* Portfólio */
+  .portfolio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 16px; }
+  .portfolio-item { position: relative; border-radius: 8px; overflow: hidden; background: #eee;
+    aspect-ratio: 1 / 1; border: 1px solid rgba(20,35,28,0.1); cursor: pointer; }
+  .portfolio-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .portfolio-item .cap { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.65));
+    color: #fff; font-size: 11px; padding: 16px 8px 6px; }
+  .portfolio-empty { padding: 40px 16px; text-align: center; font-size: 13px; color: rgba(20,35,28,0.5); }
+
+  /* Lightbox */
+  #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 999;
+    align-items: center; justify-content: center; padding: 20px; }
+  #lightbox.active { display: flex; }
+  #lightbox img { max-width: 100%; max-height: 80vh; border-radius: 6px; }
+  #lightbox-close { position: absolute; top: 20px; right: 20px; color: #fff; font-size: 28px; background: none; border: none; }
+  #lightbox-caption { color: #fff; text-align: center; margin-top: 10px; font-size: 13px; }
 </style>
 </head>
 <body>
@@ -81,86 +105,151 @@
   <header>
     <div>
       <h1>Painel do Negócio</h1>
-      <p>Produtos, vendas e resultado</p>
+      <p>Produtos, vendas e portfólio</p>
     </div>
     <div class="badge">💼</div>
   </header>
 
   <button id="install-btn">⬇ Instalar este app no telemóvel</button>
 
-  <div class="panel">
-    <div class="panel-header">Resumo</div>
-    <div class="panel-body" style="padding-top:4px; padding-bottom:8px;">
-      <table class="tbl-resumo">
-        <thead>
-          <tr><th>Receita</th><th>Custo</th><th>Lucro líquido</th><th>Margem</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td id="c-receita">0,00 Kz</td>
-            <td id="c-custo">0,00 Kz</td>
-            <td id="c-lucro">0,00 Kz</td>
-            <td id="c-margem">0,00%</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="negocio">Negócio</button>
+    <button class="tab-btn" data-tab="portfolio">Portfólio</button>
   </div>
 
-  <div class="panel">
-    <div class="panel-header">Adicionar produto</div>
-    <div class="panel-body">
-      <div class="form-grid">
-        <input class="full" id="f-nome" placeholder="Nome do produto" />
-        <input type="number" id="f-stock" placeholder="Stock" />
-        <input type="number" id="f-compra" placeholder="Preço custo (Kz)" />
-        <input type="number" id="f-venda" placeholder="Preço venda (Kz)" />
-        <button class="primary" id="btn-add">+ Adicionar</button>
+  <!-- VIEW: NEGÓCIO -->
+  <div class="view active" id="view-negocio">
+    <div class="panel">
+      <div class="panel-header">Resumo</div>
+      <div class="panel-body" style="padding-top:4px; padding-bottom:8px;">
+        <table class="tbl-resumo">
+          <thead>
+            <tr><th>Receita</th><th>Custo</th><th>Lucro líquido</th><th>Margem</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td id="c-receita">0,00 Kz</td>
+              <td id="c-custo">0,00 Kz</td>
+              <td id="c-lucro">0,00 Kz</td>
+              <td id="c-margem">0,00%</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <div class="erro" id="erro"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">Adicionar produto</div>
+      <div class="panel-body">
+        <div class="form-grid">
+          <input class="full" id="f-nome" placeholder="Nome do produto" />
+          <input type="number" id="f-stock" placeholder="Stock" />
+          <input type="number" id="f-compra" placeholder="Preço custo (Kz)" />
+          <input type="number" id="f-venda" placeholder="Preço venda (Kz)" />
+          <button class="primary" id="btn-add">+ Adicionar</button>
+        </div>
+        <div class="erro" id="erro"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header" id="p-count">Produtos (0)</div>
+      <p class="scroll-hint">Desliza a tabela para o lado para ver todas as colunas →</p>
+      <div class="tbl-wrap">
+        <table class="produtos">
+          <thead>
+            <tr>
+              <th>Produto</th><th>Stock</th><th>Preço custo</th><th>Preço venda</th>
+              <th>Vendidos</th><th>Receita</th><th>Lucro</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="lista"></tbody>
+        </table>
+      </div>
+      <div id="empty-msg" class="empty" style="display:none;">Ainda não há produtos. Adiciona o primeiro acima.</div>
     </div>
   </div>
 
-  <div class="panel">
-    <div class="panel-header" id="p-count">Produtos (0)</div>
-    <p class="scroll-hint">Desliza a tabela para o lado para ver todas as colunas →</p>
-    <div class="tbl-wrap">
-      <table class="produtos">
-        <thead>
-          <tr>
-            <th>Produto</th>
-            <th>Stock</th>
-            <th>Preço custo</th>
-            <th>Preço venda</th>
-            <th>Vendidos</th>
-            <th>Receita</th>
-            <th>Lucro</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody id="lista"></tbody>
-      </table>
+  <!-- VIEW: PORTFÓLIO -->
+  <div class="view" id="view-portfolio">
+    <div class="panel">
+      <div class="panel-header">Portfólio de designs</div>
+      <div class="portfolio-grid" id="portfolio-grid"></div>
+      <div class="portfolio-empty" id="portfolio-empty" style="display:none;">
+        Ainda não há imagens no portfólio.
+      </div>
     </div>
-    <div id="empty-msg" class="empty" style="display:none;">Ainda não há produtos. Adiciona o primeiro acima.</div>
   </div>
 
   <p class="footer-note">Os dados ficam guardados neste telemóvel, mesmo offline.</p>
 </div>
 
+<div id="lightbox">
+  <button id="lightbox-close">✕</button>
+  <div>
+    <img id="lightbox-img" src="" alt="" />
+    <div id="lightbox-caption"></div>
+  </div>
+</div>
+
 <script>
+  /* ---------- Navegação entre abas ---------- */
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById("view-" + btn.dataset.tab).classList.add("active");
+    };
+  });
+
+  /* ---------- Portfólio ----------
+     Para adicionares uma capa: sobe a imagem para a pasta /portfolio no GitHub
+     e acrescenta uma linha aqui com o nome do ficheiro e uma legenda. */
+  const portfolioItems = [
+    // { src: "portfolio/capa1.jpg", legenda: "Capa - Single 'Respeito'" },
+    // { src: "portfolio/capa2.jpg", legenda: "Capa - EP Raízes" },
+  ];
+
+  function renderPortfolio() {
+    const grid = document.getElementById("portfolio-grid");
+    const empty = document.getElementById("portfolio-empty");
+    grid.innerHTML = "";
+    if (portfolioItems.length === 0) {
+      empty.style.display = "block";
+      return;
+    }
+    empty.style.display = "none";
+    portfolioItems.forEach(item => {
+      const div = document.createElement("div");
+      div.className = "portfolio-item";
+      div.innerHTML = `<img src="${item.src}" alt="${item.legenda}" /><div class="cap">${item.legenda}</div>`;
+      div.onclick = () => openLightbox(item.src, item.legenda);
+      grid.appendChild(div);
+    });
+  }
+
+  function openLightbox(src, legenda) {
+    document.getElementById("lightbox-img").src = src;
+    document.getElementById("lightbox-caption").textContent = legenda;
+    document.getElementById("lightbox").classList.add("active");
+  }
+  document.getElementById("lightbox-close").onclick = () => {
+    document.getElementById("lightbox").classList.remove("active");
+  };
+  document.getElementById("lightbox").onclick = (e) => {
+    if (e.target.id === "lightbox") document.getElementById("lightbox").classList.remove("active");
+  };
+
+  /* ---------- Negócio ---------- */
   const STORAGE_KEY = "negocio_produtos_v1";
   let produtos = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null") || [
     { id: 1, nome: "Capa de álbum (design)", stock: 20, precoCompra: 500, precoVenda: 3500, vendidos: 6 },
     { id: 2, nome: "Pack de flyers", stock: 40, precoCompra: 200, precoVenda: 1200, vendidos: 11 },
   ];
 
-  function salvar() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(produtos));
-  }
-
-  function fmt(n) {
-    return (n || 0).toLocaleString("pt-PT", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  }
+  function salvar() { localStorage.setItem(STORAGE_KEY, JSON.stringify(produtos)); }
+  function fmt(n) { return (n || 0).toLocaleString("pt-PT", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 
   function render() {
     let receita = 0, custo = 0;
@@ -185,10 +274,7 @@
     const emptyMsg = document.getElementById("empty-msg");
     lista.innerHTML = "";
 
-    if (produtos.length === 0) {
-      emptyMsg.style.display = "block";
-      return;
-    }
+    if (produtos.length === 0) { emptyMsg.style.display = "block"; return; }
     emptyMsg.style.display = "none";
 
     produtos.forEach(p => {
@@ -210,10 +296,7 @@
     });
 
     document.querySelectorAll(".del-btn").forEach(btn => {
-      btn.onclick = () => {
-        produtos = produtos.filter(p => p.id != btn.dataset.id);
-        salvar(); render();
-      };
+      btn.onclick = () => { produtos = produtos.filter(p => p.id != btn.dataset.id); salvar(); render(); };
     });
     document.querySelectorAll(".vendidos-input").forEach(inp => {
       inp.oninput = () => {
@@ -245,11 +328,10 @@
   };
 
   render();
+  renderPortfolio();
 
   if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("service-worker.js");
-    });
+    window.addEventListener("load", () => { navigator.serviceWorker.register("service-worker.js"); });
   }
 
   let deferredPrompt;
